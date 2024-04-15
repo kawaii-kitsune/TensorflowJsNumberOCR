@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const routes = require('./routes'); // Import routes
 const nst= require('./tensorflow/models'); 
 const nodemailer = require('nodemailer');
+
+const path = require('path');
 // Create Express application
 require('dotenv').config(); 
 const app = express();
@@ -56,7 +58,33 @@ app.use((err, req, res, next) => {
 //         }
 //     });
 // });
+const uploadFolderPath = path.join(__dirname, 'uploads');
 
+// Function to clear the upload folder
+function clearUploadFolder() {
+    fs.readdir(uploadFolderPath, (err, files) => {
+        if (err) {
+            console.error('Error reading upload folder:', err);
+            return;
+        }
+        files.forEach(file => {
+            const filePath = path.join(uploadFolderPath, file);
+            fs.unlink(filePath, err => {
+                if (err) {
+                    console.error('Error deleting file:', err);
+                } else {
+                    console.log('File deleted successfully:', file);
+                }
+            });
+        });
+    });
+}
+
+// Interval in milliseconds (e.g., 24 hours)
+const interval = 24 * 60 * 60 * 1000;
+
+// Schedule the clearing process at regular intervals
+setInterval(clearUploadFolder, interval);
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
