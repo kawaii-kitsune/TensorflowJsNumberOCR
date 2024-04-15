@@ -4,8 +4,6 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "echo \"No Build",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "run": "node app.js"
   },
